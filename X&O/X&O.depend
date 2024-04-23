@@ -1,0 +1,44 @@
+# depslib dependency file v1.0
+1713857271 source:c:\users\danie\desktop\x&o\main.cpp
+	<iostream>
+	"Game.h"
+	"Table.h"
+	"Player.h"
+	"Computer.h"
+
+1713857271 c:\users\danie\desktop\x&o\include\game.h
+	"Table.h"
+	"Player.h"
+	"Computer.h"
+
+1713857700 c:\users\danie\desktop\x&o\include\table.h
+	<vector>
+
+1713855612 c:\users\danie\desktop\x&o\include\player.h
+	<iostream>
+
+1713855797 c:\users\danie\desktop\x&o\include\computer.h
+	<iostream>
+	"Table.h"
+
+1713857150 source:c:\users\danie\desktop\x&o\src\player.cpp
+	"Player.h"
+	<iostream>
+
+1713857673 source:c:\users\danie\desktop\x&o\src\table.cpp
+	"Table.h"
+	<vector>
+
+1713856855 source:c:\users\danie\desktop\x&o\src\computer.cpp
+	"Computer.h"
+	<cstdlib>
+	<ctime>
+	"Table.h"
+
+1713857724 source:c:\users\danie\desktop\x&o\src\game.cpp
+	"Game.h"
+	"Table.h"
+	"Player.h"
+	"Computer.h"
+	<iostream>
+
