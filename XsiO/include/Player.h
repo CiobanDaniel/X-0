@@ -6,10 +6,10 @@
 class Player
 {
     public:
-        Player() {};
-        std::pair<int, int> introducereMutare();
-        ~Player() {}
-        void centru(std::string text);
+        Player() {}; // Constructorul clasei
+        std::pair<int, int> introducereMutare(); // Permite jucatorului uman sa introduca o mutare
+        ~Player() {}; // Destructorul clasei
+        void centru(std::string text); // Centreaza textul in consola
 };
 
 #endif // PLAYER_H

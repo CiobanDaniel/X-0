@@ -8,8 +8,9 @@ class Computer
 {
 
 public:
-    Computer();
-    std::pair<int, int> generareMutare();
+    Computer(); // Constructorul clasei
+    std::pair<int, int> generareMutare(); // Genereaza mutarea computerului
+    std::pair<int, int> generareMutare2(std::vector<int>& miscariValide); // Genereaza mutarea computerului dar mai inteligent putin
 };
 
 #endif // COMPUTER_H

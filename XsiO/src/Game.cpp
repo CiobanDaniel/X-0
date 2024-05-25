@@ -7,33 +7,33 @@
 #include <conio.h>
 #include <unistd.h>
 
-Game::Game() {}
+Game::Game() {} // Constructorul clasei
 
-Game::~Game()
+Game::~Game() // Destructorul clasei
 {
     delete jucator1;
     delete jucator2;
     delete tabla;
 }
 
-void Game::centrare(std::string text)
+void Game::centrare(std::string text) // Centreaza textul in consola
 {
     // Va centra textul doar daca lungimea textului e mai mica decat lungimea consolei
     // Altfel va afisa textul asa cum e
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Get the console handle.
-    PCONSOLE_SCREEN_BUFFER_INFO lpScreenInfo = new CONSOLE_SCREEN_BUFFER_INFO(); // Creaza un pointer catre informatia ecranului consolei
-    // care arata catre informatia termporara a ecranului.
-    GetConsoleScreenBufferInfo(hConsole, lpScreenInfo); // Salveaza informatia ecranului consolei in pointerul lpScreenInfo.
-    COORD NewSBSize = lpScreenInfo->dwSize; // Afla lungimea consolei
-    if (NewSBSize.X > text.size())
+    PCONSOLE_SCREEN_BUFFER_INFO informatiiEcran = new CONSOLE_SCREEN_BUFFER_INFO(); // Creaza un pointer catre informatia ecranului consolei
+                                                                                // care arata catre informatia termporara a ecranului.
+    GetConsoleScreenBufferInfo(hConsole, informatiiEcran); // Salveaza informatia ecranului consolei in pointerul lpScreenInfo.
+    COORD dimensiuneNoua = informatiiEcran->dwSize; // Afla lungimea consolei
+    if (dimensiuneNoua.X > text.size())
     {
-        int newpos = ((NewSBSize.X - text.size()) / 2); // Calculeaza numarul de spatii pentru a centra textul respectiv.
-        for (int i = 0; i < newpos; i++) std::cout << " "; // Afiseaza spatiile
+        int positieNoua = ((dimensiuneNoua.X - text.size()) / 2); // Calculeaza numarul de spatii pentru a centra textul respectiv.
+        for (int i = 0; i < positieNoua; i++) std::cout << " "; // Afiseaza spatiile
     }
     std::cout << text << std::endl; // Prints the text centered :]
 }
 
-void Game::castig()
+void Game::castig() // Ce se afiseaza in caz ca jucatorul uman a castigat
 {
     int optiune;
     do
@@ -50,6 +50,7 @@ void Game::castig()
             ruleaza();
             break;
         case '2':
+
             setareJocNou();
             break;
         case '3':
@@ -67,7 +68,8 @@ void Game::castig()
     }
     while (optiune != '4');
 }
-void Game::pierdere()
+
+void Game::pierdere() // Ce se afiseaza in caz ca jucatorul uman a pierdut
 {
     int optiune;
     do
@@ -101,7 +103,8 @@ void Game::pierdere()
     }
     while (optiune != '4');
 }
-void Game::egalitate()
+
+void Game::egalitate() // Ce se afiseaza in caz de egalitate
 {
     int optiune;
     do
@@ -136,9 +139,10 @@ void Game::egalitate()
     while (optiune != '4');
 }
 
-void Game::afiseazaTabla()
+void Game::afiseazaTabla() // Afiseaza tabla din timpul jocului cu cateva detalii in plus
 {
     std::vector<std::vector<int>> matrice = tabla->getTabla();
+    centrare("[A] Meniu principal       [S] Setari");
     std::string mesaj1 = "Semnul tau este: ";
     mesaj1 += simbolJucator1;
     std::string mesaj2 = "Semnul inamicului este: ";
@@ -189,22 +193,24 @@ void Game::afiseazaTabla()
     }
 }
 
-void Game::afiseazaMeniuPrincipal()
+void Game::afiseazaMeniuPrincipal() // Afiseaza meniul principal
 {
-    centrare("1. Incepe un joc nou");
-    centrare("2. Setari");
-    centrare("3. Paraseste aplicatia");
+    centrare("[1] Incepe un joc nou");
+    centrare("[2] Setari");
+    centrare("[3] Paraseste aplicatia");
+    std::cout << "\n";
+    centrare("--Apasa tasta [i] pentru a afla cum se joaca--");
 }
 
-void Game::afiseazaMeniuPrincipal2()
+void Game::afiseazaMeniuPrincipal2() // Afiseaza meniul la terminarea unui joc
 {
-    centrare("1. Meniul principal");
-    centrare("2. Incepe un joc nou");
-    centrare("3. Setari");
-    centrare("4. Paraseste aplicatia");
+    centrare("[1] Meniul principal");
+    centrare("[2] Incepe un joc nou");
+    centrare("[3] Setari");
+    centrare("[4] Paraseste aplicatia");
 }
 
-void Game::ruleazaJoc1()
+void Game::ruleazaJoc1() // Ruleaza jocul cand jucatorul uman este primul
 {
     bool jocIncheiat = false;
     bool mutareValida;
@@ -217,6 +223,14 @@ void Game::ruleazaJoc1()
 
         centrare("Este randul tau!");
         mutare = jucator1->introducereMutare();
+        if (mutare.first == 4 && mutare.second == 4)
+        {
+            ruleaza();
+        }
+        if (mutare.first == 3 && mutare.second == 3)
+        {
+            setari();
+        }
         mutareValida = tabla->esteMutareValida(mutare.first, mutare.second);
         while (!mutareValida)
         {
@@ -224,9 +238,18 @@ void Game::ruleazaJoc1()
             afiseazaTabla();
             centrare("Mutare invalida! Incearca din nou.");
             mutare = jucator1->introducereMutare();
+            if (mutare.first == 4 && mutare.second == 4)
+            {
+                ruleaza();
+            }
+            if (mutare.first == 3 && mutare.second == 3)
+            {
+                setari();
+            }
             mutareValida = tabla->esteMutareValida(mutare.first, mutare.second);
         }
         tabla->plaseazaMutare(mutare.first, mutare.second, 1);
+
         if (tabla->esteCastig(1))
         {
             jocIncheiat = true;
@@ -243,12 +266,12 @@ void Game::ruleazaJoc1()
         afiseazaTabla();
 
         centrare("Este randul inamicului! Asteapta!");
-        mutare = jucator2->generareMutare();
+        mutare = jucator2->generareMutare2(tabla->miscariValide);
         mutareValida = tabla->esteMutareValida(mutare.first, mutare.second);
         sleep(1);
         while (!mutareValida)
         {
-            mutare = jucator2->generareMutare();
+            mutare = jucator2->generareMutare2(tabla->miscariValide);
             mutareValida = tabla->esteMutareValida(mutare.first, mutare.second);
         }
         tabla->plaseazaMutare(mutare.first, mutare.second, 2);
@@ -269,7 +292,7 @@ void Game::ruleazaJoc1()
     system("cls");
 }
 
-void Game::ruleazaJoc2()
+void Game::ruleazaJoc2() // Ruleaza jocul cand computerul este primul jucator
 {
     bool jocIncheiat = false;
     bool mutareValida;
@@ -281,12 +304,12 @@ void Game::ruleazaJoc2()
         afiseazaTabla();
 
         centrare("Este randul inamicului! Asteapta!");
-        mutare = jucator2->generareMutare();
+        mutare = jucator2->generareMutare2(tabla->miscariValide);
         mutareValida = tabla->esteMutareValida(mutare.first, mutare.second);
         sleep(1);
         while (!mutareValida)
         {
-            mutare = jucator2->generareMutare();
+            mutare = jucator2->generareMutare2(tabla->miscariValide);
             mutareValida = tabla->esteMutareValida(mutare.first, mutare.second);
         }
         tabla->plaseazaMutare(mutare.first, mutare.second, 2);
@@ -307,6 +330,14 @@ void Game::ruleazaJoc2()
 
         centrare("Este randul tau!");
         mutare = jucator1->introducereMutare();
+        if (mutare.first == 4 && mutare.second == 4)
+        {
+            ruleaza();
+        }
+        if (mutare.first == 3 && mutare.second == 3)
+        {
+            setari();
+        }
         mutareValida = tabla->esteMutareValida(mutare.first, mutare.second);
         while (!mutareValida)
         {
@@ -314,6 +345,14 @@ void Game::ruleazaJoc2()
             afiseazaTabla();
             centrare("Mutare invalida! Incercati din nou.");
             mutare = jucator1->introducereMutare();
+            if (mutare.first == 4 && mutare.second == 4)
+            {
+                ruleaza();
+            }
+            if (mutare.first == 3 && mutare.second == 3)
+            {
+                setari();
+            }
             mutareValida = tabla->esteMutareValida(mutare.first, mutare.second);
         }
         tabla->plaseazaMutare(mutare.first, mutare.second, 1);
@@ -333,7 +372,7 @@ void Game::ruleazaJoc2()
     system("cls");
 }
 
-void Game::incepeJocNou()
+void Game::incepeJocNou() // Afiseaza meniul pentru a alege care jucator incepe primul
 {
     system("cls");
     centrare("db   db db    db .88b  d88.  .d8b.  d8b   db      db    db .d8888. ");
@@ -351,9 +390,9 @@ void Game::incepeJocNou()
     centrare(" `Y88P'  `Y88P'  YP  YP  YP 88      ~Y8888P'    YP    Y88888P 88   YD ");
     std::cout << "\n\n";
     centrare("Alege cine va incepe:");
-    centrare("1. Jucatorul uman");
-    centrare("2. Calculatorul");
-    centrare("3. Return");
+    centrare("[1] Jucatorul uman");
+    centrare("[2] Calculatorul");
+    centrare("[3] Return");
     int optiune;
     optiune = getch();
     switch (optiune)
@@ -376,13 +415,13 @@ void Game::incepeJocNou()
     }
 }
 
-void Game::setareJocNou()
+void Game::setareJocNou() // Creaza o noua instanta a tablei si apeleaza incepeJocNou()
 {
     tabla = new Table();
     incepeJocNou();
 }
 
-void Game::artaAscii()
+void Game::artaAscii() // Afiseaza arta ascii din meniul principal
 {
     centrare("ooooooo  ooooo        .oo.            .oooooo.   ");
     centrare(" `8888    d8'       .88' `8.         d8P'  `Y8b  ");
@@ -394,18 +433,18 @@ void Game::artaAscii()
     std::cout << "\n\n";
 }
 
-void Game::setariCuloare()
+void Game::setariCuloare() // Permite alegerea temei jocului dintre cele enumerate
 {
     int c;
     do
     {
         system("cls");
         centrare("Alege tematica aplicatiei:");
-        centrare("1. Default");
-        centrare("2. Albastru");
-        centrare("3. Rosu");
-        centrare("4. Verde");
-        centrare("5. Return");
+        centrare("[1] Default");
+        centrare("[2] Albastru");
+        centrare("[3] Rosu");
+        centrare("[4] Verde");
+        centrare("[5] Return");
         c = getch();
         switch (c)
         {
@@ -431,7 +470,7 @@ void Game::setariCuloare()
     while(c != 5);
 }
 
-void Game::info()
+void Game::info() // Afiseaza informatii despre proiect
 {
     system("cls");
     std::cout << "\n";
@@ -442,12 +481,12 @@ void Game::info()
     centrare("Facultatea: FIESC");
     centrare("Specializarea: Calculatoare");
     centrare("An universitar: 2023-2024\n");
-    centrare("--Apasa orice pentru a reveni--");
+    centrare("--Apasa orice tasta pentru a reveni--");
     getch();
 
 }
 
-void Game::setari()
+void Game::setari() // Afiseaza meniul pentru setari si permite introducerea optiunii
 {
     int o;
     do
@@ -455,9 +494,9 @@ void Game::setari()
         system("cls");
         std::cout << "\n\n";
         centrare("--SETARI--");
-        centrare("1. Tematica");
-        centrare("2. Info");
-        centrare("3. Return");
+        centrare("[1] Tematica");
+        centrare("[2] Info");
+        centrare("[3] Return");
         o = getch();
         switch (o)
         {
@@ -477,7 +516,36 @@ void Game::setari()
     while(o != 3);
 }
 
-void Game::ruleaza()
+void Game::help() // Afiseaza informatii despre cum se joaca jocul si cum se utilizeaza aplicatia
+{
+    system("cls");
+    std::cout << "\n";
+    centrare("--Regulile jocului--");
+    std::cout << "\n";
+    centrare("-se joaca in 2 jucatori ( in cazul acestui joc intre tine si calculator );  ");
+    centrare("-incepe jucatorul care are piesele inscriptionate cu 'X'.                   ");
+    std::cout << "\n";
+    centrare("Scopul jocului este ca unul dintre  jucatori sa reuseasca sa obtina o linie,");
+    centrare("o  diagonala  sau o coloana  marcata  cu  simbolul  propriu ( 'X' sau 'O' ).");
+    centrare("Daca niciunul dintre jucatori nu va reusi acest lucru, jocul poate fi reluat");
+    centrare("pana cand unul dintre jucatori va castiga.                                  ");
+    std::cout << "\n";
+    centrare("--Utilizarea aplicatiei--");
+    std::cout << "\n";
+    centrare("Pentru a te deplasa prin  meniurile  aplicatiei apasa tasta cu semnul dintre");
+    centrare("casutele [] din stanga  optiunii dorite din meniu. In timpul jocului insa va");
+    centrare("trebui sa introduci numarul liniei si coloanei in care doresti sa fie plasat");
+    centrare("semnul tau ( 'X' sau 'O' ). Desigur, in timpul jocului ai posibilitatea de a");
+    centrare("accesa setarile sau de a te intorci in meniul principal daca introduci tasta");
+    centrare("corespunzatoare acelei optiuni ( dintre casutele [] ).                      ");
+    std::cout << "\n";
+    centrare(">w< Acum tot ce pot sa iti spun este succes! >w<");
+    std::cout << "\n";
+    centrare("--Apasa orice tasta pentru a reveni in meniul principal--");
+    getch();
+}
+
+void Game::ruleaza() // Meniul principal al jocului
 {
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO info;
@@ -507,6 +575,12 @@ void Game::ruleaza()
             std::cout << "\n\n";
             centrare("La revedere!");
             exit(0);
+            break;
+        case 'i':
+            help();
+            break;
+        case 'I':
+            help();
             break;
         default:
             break;

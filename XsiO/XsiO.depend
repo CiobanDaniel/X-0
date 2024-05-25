@@ -4,28 +4,28 @@
 	"Game.h"
 	<windows.h>
 
-1716570523 c:\users\danie\desktop\xsio\xsio\include\game.h
+1716640372 c:\users\danie\desktop\xsio\xsio\include\game.h
 	"Table.h"
 	"Player.h"
 	"Computer.h"
 
-1716570523 c:\users\danie\desktop\xsio\xsio\include\table.h
+1716650884 c:\users\danie\desktop\xsio\xsio\include\table.h
 	<vector>
 
-1716570523 c:\users\danie\desktop\xsio\xsio\include\player.h
+1716638984 c:\users\danie\desktop\xsio\xsio\include\player.h
 	<iostream>
 
-1716570523 c:\users\danie\desktop\xsio\xsio\include\computer.h
+1716650846 c:\users\danie\desktop\xsio\xsio\include\computer.h
 	<iostream>
 	"Table.h"
 
-1716570523 source:c:\users\danie\desktop\xsio\xsio\src\computer.cpp
+1716644582 source:c:\users\danie\desktop\xsio\xsio\src\computer.cpp
 	"Computer.h"
 	<cstdlib>
 	<ctime>
 	"Table.h"
 
-1716570523 source:c:\users\danie\desktop\xsio\xsio\src\game.cpp
+1716651461 source:c:\users\danie\desktop\xsio\xsio\src\game.cpp
 	"Game.h"
 	"Table.h"
 	"Player.h"
@@ -35,13 +35,13 @@
 	<conio.h>
 	<unistd.h>
 
-1716570523 source:c:\users\danie\desktop\xsio\xsio\src\player.cpp
+1716642201 source:c:\users\danie\desktop\xsio\xsio\src\player.cpp
 	"Player.h"
 	<iostream>
 	<conio.h>
 	<windows.h>
 
-1716570523 source:c:\users\danie\desktop\xsio\xsio\src\table.cpp
+1716651385 source:c:\users\danie\desktop\xsio\xsio\src\table.cpp
 	"Table.h"
 	<vector>
 
